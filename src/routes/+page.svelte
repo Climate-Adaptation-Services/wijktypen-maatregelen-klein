@@ -1,154 +1,91 @@
 <script>
-  import _ from 'lodash';
-  import { onMount } from 'svelte'
-  import { selectAll, scaleLinear } from 'd3'
+  import { select, selectAll } from 'd3';
+
+  // for preloading images
+	let imageModules = import.meta.glob("/static/images/maatregelen/*");
+
   export let data;
-  let csvData = data.data
 
-  const wijken = _.map(csvData, 'Wijk')
-  const bouwjaren = _.map(csvData, 'Bouwjaar')
-  const hoogtes = _.map(csvData, 'Hoogte')
-  const groenen = _.map(csvData, 'Groen')
-  const hittes = _.map(csvData, 'Hitte')
-  const wateroverlasten = _.map(csvData, 'Wateroverlast')
+  console.log(data.data)
 
-  const gebouwhoogte = {
-    '2,6':'midden',
-    '1,4':'laag',
-    '3,10':'hoog',
-    '6,20':'hoger',
-    '4,10':'hoog',
-    '3,5':'midden',
-    '2,3':'laag',
-    '2,4':'laag',
-    '4,6':'5lagen',
-    '3,5':'midden'
+  const wijkOrder = [
+    'Historische binnenstad',
+    'Vooroorlogse woonwijk',
+    'Stedelijk bouwblok',
+    'Tuindorp',
+    'Volkswijk',
+    'Naoorlogse woonwijk',
+    'Tuinstad laagbouw',
+    'Tuinstad hoogbouw',
+    'Hoogbouw',
+    'VINEX',
+    'Villa',
+    'Bloemkoolwijk',
+    'Vernieuwd',
+    'Bedrijven'
+  ]
+
+  const dataOrdered = []
+  data.data.forEach(row => {
+    dataOrdered.push(wijkOrder.map(wijk => row[wijk]))
+  });
+
+  console.log(dataOrdered)
+
+  function mouseover(tekst){
+    select('.' + tekst.replaceAll(' ','').replaceAll('/','').replaceAll(',',''))
+      .style('opacity', 1)
   }
 
-  const klasse = {
-    '1':'Laag',
-    '2':'Midden',
-    '3':'Hoog'
+  function mouseout(){
+    selectAll('.tooltip')
+      .style('opacity', 0)
   }
-  
-  const bouwjaarScale = {
-    'Voor 1910':[1870, 1910],
-    'Voor 1945':[1870, 1945],
-    'Van alle tijden':[1870, 2010],
-    'Na 1945':[1945, 2010],
-    'Na 1960':[1960, 2010]
-  }
-
-  onMount(() => {
-    const elem = document.querySelector(".tdbouwjaar");
-    const box = elem.getBoundingClientRect();
-    const cellWidth = box.width
-    const cellHeight = box.height
-
-    const xScale = scaleLinear()
-      .domain([1870, 2010])
-      .range([0, cellWidth-0]);
-
-    selectAll('line')
-      .data(bouwjaren)
-        .attr('x1', d => {
-          if(d.includes('-')){return xScale(+d.split('-')[0])}
-          else{console.log(d);return xScale(bouwjaarScale[d][0])}
-        })
-        .attr('x2', d => {
-          if(d.includes('-')){return xScale(+d.split('-')[1])}
-          else{return xScale(bouwjaarScale[d][1])}
-        })        
-        .attr('y1', cellHeight/2 - 3)
-        .attr('y2', cellHeight/2 - 3)
-
-  })
 
 </script>
 
+<!-- preload images -->
+<svelte:head>
+	{#each Object.keys(imageModules) as imageUrl}
+    <link rel="preload" as="image" href={imageUrl.slice(7)} />
+	{/each}
+</svelte:head>
+
 <table>
   <tr>
-    <th></th>
-    {#each wijken as wijk, i}
+    <th style="width:150px"></th>
+    {#each wijkOrder as wijk, i}
       <th style="background-image:url('/images/wijken/{wijk}.png'); background-size: 100% 100%">{wijk}</th>
     {/each}
   </tr>
-  <tr>
-    <td class='tdimage'>
-      <img class='category_image' src='/images/calendar.png'/>
-      <p class='category_tekst'>Bouwjaar</p>
-    </td>
-    {#each bouwjaren as bouwjaar, i}
-      <td class='tdbouwjaar'>
-        <svg>
-          <line stroke="steelblue" stroke-width='12'/>
-        </svg>
-        <p class='category_tekst'>{bouwjaar}</p>
+  {#each data.data as row, i}
+    <tr>
+      <td class='maatregel-title' 
+        on:mouseover={() => mouseover(row['tekst'])}
+        on:mouseout={() => mouseout()}
+      >
+        <p class='maatregel_tekst'>{row['tekst']}</p>
       </td>
-    {/each}
-  </tr>
-  <tr>
-    <td class='tdimage'>
-      <img class='category_image' src='/images/building.png'/>
-      <p class='category_tekst'>Hoogte</p>
-    </td>
-    {#each hoogtes as hoogte, i}
-      <td>        
-        {#if hoogte}
-          <img class='hoogteimage' src='/images/{gebouwhoogte[hoogte]}.png'/>
-          <p class='hoogtetekst'>{hoogte.split(',')[0] + ' tot ' + hoogte.split(',')[1] + ' lagen'}</p>
-        {/if}
-      </td>
-    {/each}
-  </tr>
-  <tr>
-    <td class='tdimage'>
-      <img class='category_image' src='/images/forest.png'/>
-      <p class='category_tekst'>Groen</p>
-    </td>
-    {#each groenen as groen, i}  
-      <td>
-        {#if groen}
-          <img src='/images/tree.png' style="width:{groen*1.3}%" />
-          <p>{groen}%</p>
-        {/if}
-      </td>
-    {/each}
-  </tr>
-  <tr>
-    <td class='tdimage'>
-      <img class='category_image' src='/images/sun.png'/>
-      <p class='category_tekst'>Hitte</p>
-    </td>
-    {#each hittes as hitte, i}
-      <td>
-        {#if hitte}
-          <img src='/images/hitte{hitte}.png' style='width:{12+hitte*7}%'/>
-          <p>{klasse[hitte]}</p>
-        {/if}
-      </td>
-    {/each}
-  </tr>
-  <tr>
-    <td class='tdimage'>
-      <img class='category_image' src='/images/rain.png'/>
-      <p class='category_tekst'>Wateroverlast</p>
-    </td>
-    {#each wateroverlasten as wateroverlast, i}
-      <td>
-        {#if wateroverlast}
-          <img src='/images/wateroverlast{wateroverlast}.png' style='width:{4+wateroverlast*3}%'/>
-          <p>{klasse[wateroverlast]}</p>
-        {/if}
-      </td>
-    {/each}
-  </tr>
+      {#each dataOrdered[i] as value}
+        <td class='tdbouwjaar' style={(value==="x") ? "background-color:#59A14F" : ""}></td>
+      {/each}
+    </tr>
+  {/each}
 </table>
+
+{#each data.data as maatregel, i}
+  <div class='tooltip {maatregel['tekst'].replaceAll(' ','').replaceAll('/','').replaceAll(',','')}'>
+    <img class='tooltip-img' src='/images/maatregelen/{maatregel['tekst'].replaceAll(' ', '').replaceAll(',','').replaceAll('/','')}.jpg'/>
+    <h2>{maatregel['tekst']}</h2>
+    <p>{maatregel['omschrijving']}</p>
+  </div>
+{/each}
+
 
 <style>
   table{
     width:99vw;
-    height:97vh;
+    height:76vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
   }
@@ -158,9 +95,10 @@
     text-align: center;
     position: relative;
     color:rgb(96, 96, 96);
-    height:15vh;
+    height:4vh;
     font-size:0.95vw;
   }
+
   th{
     font-size:0.9vw;
     /* color:rgb(96, 96, 96); */
@@ -173,29 +111,23 @@
       -1px 1px 0 #000,
       1px 1px 0 #000;
   }
-  .tdimage{
+
+  .maatregel-title{
+    border: #e9ecf5 solid;
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .category_image{
-    width:50%;
-  }
-  .category_tekst{
-    font-size: 0.9vw;
-  }
-  p{
-    text-align: center;
-    position:absolute;
-    width:100%;
-    bottom:3px;
-    margin-bottom: 0px;
+  .maatregel-title:hover{
+    border: white solid;
+    background-color: #e9ecf5;
   }
 
-  .hoogteimage{
-    position: absolute;
-    bottom:25px;
-    width:30%;
-    left:35%;
+  .maatregel_tekst{
+    font-size: 14px;
+    pointer-events: none;
   }
 
   svg{
@@ -204,6 +136,25 @@
     position: absolute;
     left:0;
     top:0;
+  }
+
+  .tooltip{
+    background-color: white;
+    position:fixed;
+    width:50%;
+    height:fit-content;
+    top:10%;
+    left:165px;
+    box-shadow: 0 8px 15px rgb(0 0 0 / 0.5);
+    border-radius: 3%;
+    text-align: center;
+    padding: 30px;
+    opacity:0;
+  }
+
+  .tooltip-img{
+    width:80%;
+    border-radius: 1%;
   }
 
 </style>
