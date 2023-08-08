@@ -59,7 +59,7 @@
     {/each}
   </tr>
   {#each data.data as row, i}
-    <tr>
+    <tr class='normaltr'>
       <td class='maatregel-title' 
         on:mouseover={() => mouseover(row['tekst'])}
         on:mouseout={() => mouseout()}
@@ -67,7 +67,7 @@
         <p class='maatregel_tekst'>{row['tekst']}</p>
       </td>
       {#each dataOrdered[i] as value}
-        <td class='tdbouwjaar' style={(value==="x") ? "background-color:#59A14F" : ""}></td>
+        <td style={(value==="x") ? "background-color:#59A14F" : ""}></td>
       {/each}
     </tr>
   {/each}
@@ -112,7 +112,7 @@
       1px 1px 0 #000;
   }
 
-  tr:hover{
+  .normaltr:hover{
     filter: brightness(1.2);
   }
 
