@@ -10,19 +10,19 @@
 
   const wijkOrder = [
     'Historische binnenstad',
-    'Vooroorlogse woonwijk',
     'Stedelijk bouwblok',
-    'Tuindorp',
     'Volkswijk',
+    'Tuindorp',
+    'Vooroorlogse woonwijk',
     'Naoorlogse woonwijk',
     'Tuinstad laagbouw',
     'Tuinstad hoogbouw',
     'Hoogbouw',
-    'VINEX',
-    'Villa',
+    'Vinexwijk',
+    'Villawijk',
     'Bloemkoolwijk',
-    'Vernieuwd',
-    'Bedrijven'
+    'Bedrijventerrein',
+    'Vernieuwd'
   ]
 
   const dataOrdered = []
@@ -53,7 +53,7 @@
 
 <table>
   <tr>
-    <th style="width:150px"></th>
+    <th style="width:200px"></th>
     {#each wijkOrder as wijk, i}
       <th style="background-image:url('/images/wijken/{wijk}.png'); background-size: 100% 100%">{wijk}</th>
     {/each}
@@ -85,7 +85,7 @@
 <style>
   table{
     width:99vw;
-    height:76vh;
+    height:60vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
   }
@@ -95,7 +95,7 @@
     text-align: center;
     position: relative;
     color:rgb(96, 96, 96);
-    height:4vh;
+    height:3vh;
     font-size:0.95vw;
   }
 
@@ -144,7 +144,7 @@
     width:50%;
     height:fit-content;
     top:10%;
-    left:165px;
+    left:216px;
     box-shadow: 0 8px 15px rgb(0 0 0 / 0.5);
     border-radius: 3%;
     text-align: center;
