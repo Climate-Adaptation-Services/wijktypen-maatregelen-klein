@@ -34,12 +34,12 @@
 
   function mouseover(tekst){
     select('.' + tekst.replaceAll(' ','').replaceAll('/','').replaceAll(',',''))
-      .style('opacity', 1)
+      .style('visibility', 'visible')
   }
 
   function mouseout(){
     selectAll('.tooltip')
-      .style('opacity', 0)
+      .style('visibility', 'hidden')
   }
 
 </script>
@@ -112,6 +112,10 @@
       1px 1px 0 #000;
   }
 
+  tr:hover{
+    filter: brightness(1.2);
+  }
+
   .maatregel-title{
     border: #e9ecf5 solid;
     background-color: white;
@@ -149,7 +153,7 @@
     border-radius: 3%;
     text-align: center;
     padding: 30px;
-    opacity:0;
+    visibility: hidden;
   }
 
   .tooltip-img{
