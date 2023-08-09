@@ -111,12 +111,6 @@
     border-spacing: 3px 3px;
   }
 
-  .svg-container{
-    width: 100%;
-    height: 100%;
-    position:relative;
-  }
-
   td{
     background-color: #e9ecf5;
     text-align: center;
