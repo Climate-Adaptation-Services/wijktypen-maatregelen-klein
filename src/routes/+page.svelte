@@ -19,11 +19,12 @@
       const boxtd = document.getElementsByClassName('cell')[0].getBoundingClientRect()
 
       const circle = rc.rectangle(0, 0, boxtd.width, boxtd.height, 
-        { roughness: 0.7, 
+        { roughness: 0, 
           fill: '#59A04F', 
           stroke:'none',
           fillStyle:'cross-hatch',
-          hachureGap: 3
+          hachureGap: 3,
+          strokeWidth:2
         });
       svg.appendChild(circle);
     });
@@ -134,7 +135,7 @@
   }
 
   .normaltr:hover{
-    filter: brightness(1.2);
+    filter: brightness(1.02);
   }
 
   .maatregel-title{
