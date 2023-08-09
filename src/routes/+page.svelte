@@ -1,12 +1,33 @@
 <script>
   import { select, selectAll } from 'd3';
+  // import { RoughSVG } from '$lib/components/RoughSVG.svelte';
+  import { onMount } from 'svelte';
+  import rough from 'roughjs';
 
   // for preloading images
 	let imageModules = import.meta.glob("/static/images/maatregelen/*");
 
   export let data;
-
   console.log(data.data)
+
+  let svgElements = [];
+  let temp;
+  onMount(() => {
+    svgElements.forEach((svg, index) => {
+      const rc = rough.svg(svg);
+
+      const boxtd = document.getElementsByClassName('cell')[0].getBoundingClientRect()
+
+      const circle = rc.rectangle(0, 0, boxtd.width, boxtd.height, 
+        { roughness: 1, 
+          fill: '#59A04F', 
+          stroke:'none',
+          fillStyle:'cross-hatch',
+          hachureGap: 3
+        });
+      svg.appendChild(circle);
+    });
+  })
 
   const wijkOrder = [
     'Historische binnenstad',
@@ -66,8 +87,8 @@
       >
         <p class='maatregel_tekst'>{row['tekst']}</p>
       </td>
-      {#each dataOrdered[i] as value}
-        <td style={(value==="x") ? "background-color:#59A14F" : ""}></td>
+      {#each dataOrdered[i] as value, j}
+        <td class='cell'><svg style='visibility:{(value === 'x' ? 'visible' : 'hidden')}' class='svg-container' bind:this={svgElements[i+j*dataOrdered[0].length]}></svg></td>
       {/each}
     </tr>
   {/each}
@@ -88,6 +109,12 @@
     height:60vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
+  }
+
+  .svg-container{
+    width: 100%;
+    height: 100%;
+    position:relative;
   }
 
   td{
