@@ -41,8 +41,8 @@
     'Hoogbouw',
     'Vinexwijk',
     'Villawijk',
-    'Bloemkoolwijk',
-    'Bedrijventerrein',
+    'Bloemkool-wijk',
+    'Bedrijven-terrein',
     'Vernieuwd'
   ]
 
