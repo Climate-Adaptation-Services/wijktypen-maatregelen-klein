@@ -135,7 +135,7 @@
   }
 
   .normaltr:hover{
-    filter: brightness(1.02);
+    filter: brightness(1.05);
   }
 
   .maatregel-title{
