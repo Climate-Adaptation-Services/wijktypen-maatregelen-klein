@@ -19,7 +19,7 @@
       const boxtd = document.getElementsByClassName('cell')[0].getBoundingClientRect()
 
       const circle = rc.rectangle(0, 0, boxtd.width, boxtd.height, 
-        { roughness: 1, 
+        { roughness: 0.7, 
           fill: '#59A04F', 
           stroke:'none',
           fillStyle:'cross-hatch',
