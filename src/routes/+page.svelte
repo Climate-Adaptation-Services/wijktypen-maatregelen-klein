@@ -20,9 +20,9 @@
 
       const circle = rc.rectangle(0, 0, boxtd.width, boxtd.height, 
         { roughness: 0, 
-          fill: '#59A04F', 
+          fill: '#93c38c', 
           stroke:'none',
-          fillStyle:'cross-hatch',
+          fillStyle:'solid',
           hachureGap: 3,
           strokeWidth:2
         });
