@@ -74,7 +74,7 @@
 </svelte:head>
 
 <table>
-  <tr>
+  <tr style="width:100%">
     <th style="width:200px"></th>
     {#each wijkOrder as wijk, i}
       <th style="background-image:url('/images/wijken/{wijk}.png'); background-size: 100% 100%">{wijk}</th>
@@ -107,7 +107,7 @@
 <style>
   table{
     width:99vw;
-    height:67vh;
+    height:57vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
   }
