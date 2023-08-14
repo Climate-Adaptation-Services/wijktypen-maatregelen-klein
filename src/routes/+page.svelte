@@ -107,7 +107,7 @@
 <style>
   table{
     width:99vw;
-    height:60vh;
+    height:67vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
   }
@@ -167,7 +167,7 @@
   .tooltip{
     background-color: white;
     position:fixed;
-    width:50%;
+    width:40%;
     height:fit-content;
     top:10%;
     left:216px;
@@ -179,7 +179,7 @@
   }
 
   .tooltip-img{
-    width:80%;
+    width:90%;
     border-radius: 1%;
   }
 
