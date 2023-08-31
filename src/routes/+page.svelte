@@ -107,7 +107,7 @@
 <style>
   table{
     width:99vw;
-    height:65vh;
+    height:70vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
   }
