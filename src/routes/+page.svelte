@@ -114,8 +114,8 @@
     height:97vh;
     table-layout: fixed;
     border-spacing: 3px 3px;
-    padding-top:5%;
-    padding-bottom:5%;
+    padding-top:2%;
+    padding-bottom:2%;
   }
 
   td{
